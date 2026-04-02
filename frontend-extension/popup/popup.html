@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SecureLens</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <div class="header">
+    <div class="logo">🔐 SecureLens</div>
+    <div id="user-plan" class="plan-badge">FREE</div>
+  </div>
+
+  <!-- ── Login View ─────────────────────────────────────── -->
+  <div id="login-view">
+    <h3>Login to SecureLens</h3>
+
+    <div class="form-group">
+      <input
+        type="email"
+        id="login-email"
+        placeholder="Email address"
+        class="input"
+      />
+    </div>
+
+    <div class="form-group">
+      <input
+        type="password"
+        id="login-password"
+        placeholder="Password"
+        class="input"
+      />
+    </div>
+
+    <button id="login-btn" class="btn btn-primary">Login</button>
+
+    <p class="switch-text">
+      Don't have an account?
+      <a href="#" id="show-register">Register</a>
+    </p>
+
+    <div id="login-error" class="error-msg"></div>
+  </div>
+
+  <!-- ── Register View ──────────────────────────────────── -->
+  <div id="register-view" style="display:none">
+    <h3>Create Account</h3>
+
+    <div class="form-group">
+      <input
+        type="text"
+        id="reg-name"
+        placeholder="Full name"
+        class="input"
+      />
+    </div>
+
+    <div class="form-group">
+      <input
+        type="email"
+        id="reg-email"
+        placeholder="Email address"
+        class="input"
+      />
+    </div>
+
+    <div class="form-group">
+      <input
+        type="password"
+        id="reg-password"
+        placeholder="Password (min 6 chars)"
+        class="input"
+      />
+    </div>
+
+    <button id="register-btn" class="btn btn-primary">Register</button>
+
+    <p class="switch-text">
+      Already have an account?
+      <a href="#" id="show-login">Login</a>
+    </p>
+
+    <div id="register-error" class="error-msg"></div>
+  </div>
+
+  <!-- ── Dashboard View ─────────────────────────────────── -->
+  <div id="dashboard-view" style="display:none">
+
+    <!-- User Info -->
+    <div class="user-info">
+      <span id="user-name">Welcome!</span>
+      <button id="logout-btn" class="btn-link">Logout</button>
+    </div>
+
+    <!-- Current Page Status -->
+    <div class="section">
+      <div class="section-title">Current Page</div>
+      <div id="current-url" class="url-display">Checking...</div>
+      <button id="scan-btn" class="btn btn-primary">
+        🔍 Scan This Page
+      </button>
+    </div>
+
+    <!-- Scan Result -->
+    <div id="scan-result" style="display:none" class="section">
+      <div class="section-title">Scan Result</div>
+      <div id="result-content"></div>
+    </div>
+
+    <!-- Stats -->
+    <div class="section">
+      <div class="section-title">Your Stats</div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div id="total-threats" class="stat-number">-</div>
+          <div class="stat-label">Threats Found</div>
+        </div>
+        <div class="stat-box">
+          <div id="user-plan-stat" class="stat-number">-</div>
+          <div class="stat-label">Your Plan</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Logs -->
+    <div class="section">
+      <div class="section-title">Recent Detections</div>
+      <div id="logs-list">
+        <div class="empty-state">No threats detected yet</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Scripts ────────────────────────────────────────── -->
+  <script src="../utils/constants.js"></script>
+  <script src="../utils/helpers.js"></script>
+  <script src="../storage/localStore.js"></script>
+  <script src="../services/authService.js"></script>
+  <script src="../services/apiService.js"></script>
+  <script src="popup.js"></script>
+
+</body>
+</html>

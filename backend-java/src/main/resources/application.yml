@@ -1,0 +1,77 @@
+# ================================================================
+# SecureLens Backend - Application Configuration
+# ================================================================
+
+spring:
+  application:
+    name: securelens-backend
+
+  # ── Database (PostgreSQL) ──────────────────────────────────────
+  datasource:
+    url: jdbc:postgresql://localhost:5432/securelens_db
+    username: postgres
+    password: kishore121005       # ⚠️ Replace with your actual password
+    driver-class-name: org.postgresql.Driver
+
+    # HikariCP - Database connection pool settings
+    hikari:
+      maximum-pool-size: 10             # Max simultaneous DB connections
+      minimum-idle: 2                   # 🆕 Changed from 5 → 2 (saves memory in dev)
+      idle-timeout: 30000               # Close idle connections after 30s
+      max-lifetime: 1800000             # Recycle connections every 30 mins
+      connection-timeout: 30000         # Fail if no connection in 30s
+      pool-name: SecureLensHikariPool   # 🆕 Named pool (easier to debug)
+
+  # ── JPA / Hibernate ───────────────────────────────────────────
+  jpa:
+    hibernate:
+      ddl-auto: update                  # Auto-creates/updates DB tables
+    show-sql: false                     # Set true only when debugging queries
+    open-in-view: false                 # Prevents lazy loading performance issues
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          batch_size: 20                # 🆕 Batch DB writes for better performance
+        order_inserts: true             # 🆕 Groups inserts together (faster)
+        order_updates: true             # 🆕 Groups updates together (faster)
+
+# ── Server ────────────────────────────────────────────────────────
+server:
+  port: 8080
+  error:
+    include-message: always             # Show error messages in API responses
+    include-binding-errors: always      # Show validation errors in responses
+
+# ================================================================
+# SecureLens Custom Configuration
+# ================================================================
+securelens:
+
+  # ── JWT Settings ────────────────────────────────────────────────
+  jwt:
+    secret: "securelens-secret-key-change-in-production-must-be-256bit-long"
+    expiration-ms: 86400000             # Token valid for 24 hours
+
+  # ── CORS Settings ───────────────────────────────────────────────
+  # 🆕 Added - needed for Chrome extension + React dashboard
+  cors:
+    allowed-origins:
+      - "http://localhost:3000"         # React web dashboard (dev)
+      - "http://localhost:5173"         # React with Vite (dev)
+      - "chrome-extension://*"          # Chrome extension (any ID)
+
+  # ── Rate Limiting ───────────────────────────────────────────────
+  # 🆕 Added - needed for RateLimiterConfig.java
+  rate-limit:
+    requests-per-minute: 60            # Free tier: 60 requests/min
+    premium-requests-per-minute: 300   # Premium tier: 300 requests/min
+
+# ── Logging ───────────────────────────────────────────────────────
+logging:
+  level:
+    com.securelens: DEBUG               # 🆕 Added - see YOUR app's logs clearly
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql: WARN
