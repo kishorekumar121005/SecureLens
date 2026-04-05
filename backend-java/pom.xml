@@ -6,7 +6,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- ✅ Spring Boot Parent - manages all dependency versions -->
+    <!-- Spring Boot Parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -14,7 +14,7 @@
         <relativePath/>
     </parent>
 
-    <!-- ✅ Project Identity -->
+    <!-- Project Identity -->
     <groupId>com.securelens</groupId>
     <artifactId>backend</artifactId>
     <version>1.0.0</version>
@@ -23,7 +23,6 @@
 
     <properties>
         <java.version>21</java.version>
-        <!-- 🆕 Ensures consistent encoding across all environments -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -46,23 +45,29 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- Database ORM (Object Relational Mapping) -->
+        <!-- Database ORM -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Input validation (@NotNull, @Email, @Size etc.) -->
+        <!-- Input validation -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- 🆕 Email Alerts -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
         <!-- ================================================================
              DATABASE
         ================================================================ -->
 
-        <!-- PostgreSQL JDBC Driver -->
+        <!-- PostgreSQL Driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -70,17 +75,15 @@
         </dependency>
 
         <!-- ================================================================
-             JWT (JSON Web Token) - All 3 are required together
+             JWT - All 3 required together
         ================================================================ -->
 
-        <!-- JWT API (interfaces) -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
             <version>0.12.3</version>
         </dependency>
 
-        <!-- JWT Implementation -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
@@ -88,7 +91,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- JWT + Jackson integration (for JSON parsing in tokens) -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
@@ -100,8 +102,6 @@
              JSON
         ================================================================ -->
 
-        <!-- 🆕 Jackson - Explicit JSON serialization/deserialization support -->
-        <!-- Prevents issues when converting Java objects to/from JSON -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -111,7 +111,7 @@
              UTILITIES
         ================================================================ -->
 
-        <!-- Lombok - Removes boilerplate (@Getter, @Setter, @Builder etc.) -->
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -119,21 +119,21 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Reads @ConfigurationProperties from application.yml -->
+        <!-- Configuration Processor -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <!-- Rate Limiting (controls how many API calls per minute) -->
+        <!-- Rate Limiting -->
         <dependency>
             <groupId>com.bucket4j</groupId>
             <artifactId>bucket4j-core</artifactId>
             <version>8.7.0</version>
         </dependency>
 
-        <!-- Auto-restarts app on file save during development -->
+        <!-- DevTools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -145,14 +145,12 @@
              TESTING
         ================================================================ -->
 
-        <!-- Core Spring Boot test support -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <!-- 🆕 Security test support (test protected endpoints) -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
@@ -162,14 +160,16 @@
     </dependencies>
 
     <build>
+        <!-- 🆕 Final JAR name for Railway deployment -->
+        <finalName>backend-1.0.0</finalName>
+
         <plugins>
 
-            <!-- ✅ Spring Boot Plugin - packages app as runnable JAR -->
+            <!-- Spring Boot Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <!-- Exclude Lombok from final build (not needed at runtime) -->
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -179,7 +179,7 @@
                 </configuration>
             </plugin>
 
-            <!-- ✅ Compiler Plugin - enforces Java 21 -->
+            <!-- Compiler Plugin - Java 21 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -187,14 +187,13 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
-                    <!-- 🆕 Enables @NotNull and validation annotation processing -->
                     <compilerArgs>
                         <arg>-parameters</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>
 
-            <!-- ✅ Surefire Plugin - runs tests stably -->
+            <!-- Surefire Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

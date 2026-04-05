@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: securelens-backend
+
+  datasource:
+    url: ${DATABASE_URL}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: always
+    include-binding-errors: always
+
+securelens:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration-ms: 86400000
+  cors:
+    allowed-origins:
+      - ${FRONTEND_URL:http://localhost:3000}
+      - "chrome-extension://*"
+  rate-limit:
+    requests-per-minute: 60
+    premium-requests-per-minute: 300
+
+logging:
+  level:
+    com.securelens: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
