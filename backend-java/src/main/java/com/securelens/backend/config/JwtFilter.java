@@ -14,12 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
-/**
- * JwtFilter - Runs on every incoming request
- * Checks if request has valid JWT token in Authorization header
- * If valid → sets user as authenticated in Spring Security context
- */
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
@@ -27,38 +23,69 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService userDetailsService;
 
+    // ── Public paths that skip JWT check completely ────────
+    private static final List<String> PUBLIC_PATHS = List.of(
+        "/api/health",
+        "/api/auth/login",
+        "/api/auth/register"
+    );
+
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
-        // Get Authorization header
+        String requestPath = request.getServletPath();
+
+        // ── Skip JWT check for public paths ───────────────
+        boolean isPublic = PUBLIC_PATHS.stream()
+                .anyMatch(requestPath::startsWith);
+
+        if (isPublic) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // ── Get Authorization header ───────────────────────
         final String authHeader = request.getHeader("Authorization");
 
-        // Skip if no token present
+        // ── Skip if no token ───────────────────────────────
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Extract token (remove "Bearer " prefix)
-        final String token = authHeader.substring(7);
-        final String email = jwtUtil.extractUsername(token);
+        // ── Extract and validate token ─────────────────────
+        try {
+            final String token = authHeader.substring(7);
+            final String email = jwtUtil.extractUsername(token);
 
-        // Validate and set authentication
-        if (email != null &&
-            SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (email != null &&
+                SecurityContextHolder.getContext()
+                    .getAuthentication() == null) {
 
-            var userDetails = userDetailsService.loadUserByUsername(email);
+                var userDetails =
+                    userDetailsService.loadUserByUsername(email);
 
-            if (jwtUtil.isTokenValid(token, userDetails)) {
-                var authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                if (jwtUtil.isTokenValid(token, userDetails)) {
+                    var authToken =
+                        new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                        );
+                    authToken.setDetails(
+                        new WebAuthenticationDetailsSource()
+                            .buildDetails(request)
+                    );
+                    SecurityContextHolder.getContext()
+                        .setAuthentication(authToken);
+                }
             }
+        } catch (Exception e) {
+            // Invalid token - just continue without auth
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
