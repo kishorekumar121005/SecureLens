@@ -2,6 +2,8 @@ package com.securelens.backend.config;
 
 import com.securelens.backend.security.AuthEntryPoint;
 import lombok.RequiredArgsConstructor;
+import main.java.com.securelens.backend.config.JwtFilter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,6 +41,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/health").permitAll()
+                .requestMatchers("/actuator/**").permitAll() 
                 .anyRequest().authenticated()
             )
             .authenticationProvider(authenticationProvider())
