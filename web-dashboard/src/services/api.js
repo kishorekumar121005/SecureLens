@@ -1,17 +1,14 @@
-// ============================================================
-// SecureLens Dashboard - API Service
-// ============================================================
-
 import axios from 'axios'
 
-// Create axios instance
+const BASE_URL = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api`
+  : '/api'
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: BASE_URL,
   headers: { 'Content-Type': 'application/json' }
 })
 
-// ── Request Interceptor ────────────────────────────────────
-// Automatically attach JWT token to every request
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('securelens_token')
@@ -23,8 +20,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// ── Response Interceptor ───────────────────────────────────
-// Handle token expiry globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {
