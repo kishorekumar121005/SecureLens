@@ -52,6 +52,7 @@ securelens:
   cors:
     allowed-origins:
       - ${FRONTEND_URL:http://localhost:3000}
+      - "https://*.vercel.app"
       - "chrome-extension://*"
   rate-limit:
     requests-per-minute: 60
