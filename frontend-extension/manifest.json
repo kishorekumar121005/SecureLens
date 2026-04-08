@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "SecureLens",
+  "name": "SecureLens - Cybersecurity Protection",
   "version": "1.0.0",
-  "description": "Real-time cybersecurity protection against phishing, prompt injection, and sensitive data leaks",
+  "description": "Real-time protection against phishing, prompt injection attacks, and sensitive data leaks. Stay safe while browsing.",
 
   "permissions": [
     "activeTab",
@@ -12,7 +12,7 @@
   ],
 
   "host_permissions": [
-    "http://localhost:8080/*",
+    "https://securelens.up.railway.app/*",
     "<all_urls>"
   ],
 
@@ -30,17 +30,17 @@
 
   "action": {
     "default_popup": "popup/popup.html",
-    "default_title": "SecureLens",
+    "default_title": "SecureLens - Click to protect",
     "default_icon": {
-      "16": "assets/icon16.png",
-      "48": "assets/icon48.png",
+      "16":  "assets/icon16.png",
+      "48":  "assets/icon48.png",
       "128": "assets/icon128.png"
     }
   },
 
   "icons": {
-    "16": "assets/icon16.png",
-    "48": "assets/icon48.png",
+    "16":  "assets/icon16.png",
+    "48":  "assets/icon48.png",
     "128": "assets/icon128.png"
   }
 }

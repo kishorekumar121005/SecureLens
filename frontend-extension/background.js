@@ -5,9 +5,8 @@
 
 // ── Constants (duplicated here since service workers
 //    can't import from other files directly) ──────────────
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "https://securelens.up.railway.app/api";
 const TOKEN_KEY    = "securelens_token";
-
 // ── Listen for messages from content scripts ───────────────
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
